@@ -1,18 +1,18 @@
-import uuid
-
 from sqlalchemy import Column, String
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
-from db.db import Base, db_session
+from models.base import BaseModel
 
 
-class Users(Base):
-    __tablename__ = "users"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
+class User(BaseModel):
+    __tablename__ = "user"
+    
     username = Column(String(length=256), nullable=False, unique=True)
     password = Column(String(length=256), nullable=False)
     email = Column(String(length=256), nullable=False, unique=True)
+    post = relationship("Post", back_populates="author")
+    liked_posts = relationship("Post", secondary="like", back_populates="users_who_like")
+    disliked_posts = relationship("Post", secondary="dislike", back_populates="users_who_dislike")
 
     def __init__(self, username, password, email) -> None:
         self.username = username
@@ -30,14 +30,12 @@ class Users(Base):
     @classmethod
     def find_by_user_id(cls, user_id: str):
         return cls.query.filter_by(id=user_id).one_or_none()
-
-    def save(self):
-        db_session.add(self)
-        db_session.commit()
-
-    def delete(self):
-        db_session.delete(self)
-        db_session.commit()
+    
+    def get_liked_posts(self) -> list[str]:
+        return [post.id for post in self.liked_posts]
+    
+    def get_disliked_posts(self) -> list[str]:
+        return [post.id for post in self.disliked_posts]
 
     def __repr__(self):
         return self.username

@@ -5,7 +5,8 @@ from typing import Any
 from fastapi import APIRouter, Depends
 
 from core.config import AuthJWT, config
-from schemas.response import JWTAccessToken, Message
+from schemas.response.jwt import JWTAccessToken
+from schemas.response.common import Message
 
 router = APIRouter()
 

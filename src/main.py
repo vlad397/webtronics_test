@@ -18,4 +18,4 @@ async def startup():
     init_db()
 
 
-app.include_router(v1.router, prefix="/api", tags=["user"])
+app.include_router(v1.router, prefix="/api")

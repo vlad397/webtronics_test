@@ -5,9 +5,10 @@ from typing import Any
 from fastapi import APIRouter, Depends
 
 from core.config import AuthJWT, config
-from db.db_models import Users
-from schemas.body import UserLoginBodySchema
-from schemas.response import JWTToken, Message
+from models.user import User
+from schemas.body.user import UserLoginBodySchema
+from schemas.response.jwt import JWTToken
+from schemas.response.common import Message
 from svc.handlers.user_handler import validate_pass
 
 router = APIRouter()
@@ -15,7 +16,7 @@ router = APIRouter()
 
 @router.post("/login/", description="Login method", responses={200: {"model": JWTToken}, 400: {"model": Message}})
 def login(body: UserLoginBodySchema, Authorize: AuthJWT = Depends()) -> Any:
-    user = Users.find_by_username(body.username)
+    user = User.find_by_username(body.username)
 
     if not user:
         return {"msg": "No such user"}, HTTPStatus.BAD_REQUEST

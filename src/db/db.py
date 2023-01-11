@@ -12,6 +12,6 @@ Base.query = db_session.query_property()
 
 
 def init_db() -> None:
-    from db import db_models
+    from models import user, dislike, like, post, base
 
     Base.metadata.create_all(bind=engine, checkfirst=True)

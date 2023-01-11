@@ -2,7 +2,7 @@ import re
 
 from pydantic import validator
 
-from .base import BaseSchema
+from schemas.base import BaseSchema
 
 
 class UserLoginBodySchema(BaseSchema):
