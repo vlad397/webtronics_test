@@ -6,7 +6,7 @@ from models.base import BaseModel
 
 class User(BaseModel):
     __tablename__ = "user"
-    
+
     username = Column(String(length=256), nullable=False, unique=True)
     password = Column(String(length=256), nullable=False)
     email = Column(String(length=256), nullable=False, unique=True)
@@ -30,10 +30,10 @@ class User(BaseModel):
     @classmethod
     def find_by_user_id(cls, user_id: str):
         return cls.query.filter_by(id=user_id).one_or_none()
-    
+
     def get_liked_posts(self) -> list[str]:
         return [post.id for post in self.liked_posts]
-    
+
     def get_disliked_posts(self) -> list[str]:
         return [post.id for post in self.disliked_posts]
 

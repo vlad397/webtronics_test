@@ -5,8 +5,8 @@ from typing import Any
 from fastapi import APIRouter, Depends
 
 from core.config import AuthJWT, config
-from schemas.response.jwt import JWTAccessToken
 from schemas.response.common import Message
+from schemas.response.jwt import JWTAccessToken
 
 router = APIRouter()
 
@@ -32,8 +32,10 @@ def refresh(Authorize: AuthJWT = Depends()) -> Any:
         error = e.__class__.__name__
         if error == "MissingTokenError":
             return {"msg": "Please provide refresh token"}, HTTPStatus.BAD_REQUEST
-        if error == "JWTDecodeError":
+        elif error == "JWTDecodeError":
             return {"msg": "Refresh token has expired"}, HTTPStatus.UNAUTHORIZED
+        elif error == "InvalidHeaderError":
+            return {"msg": "Wrong access token form"}, HTTPStatus.BAD_REQUEST
         return {"msg": error}, HTTPStatus.BAD_REQUEST
 
     return JWTAccessToken(access_token=access_token), HTTPStatus.OK

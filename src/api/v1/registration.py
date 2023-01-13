@@ -5,8 +5,8 @@ from fastapi import APIRouter
 
 from models.user import User
 from schemas.body.user import UserRegisterBodySchema
-from schemas.response.user import UserResponseSchema
 from schemas.response.common import Message
+from schemas.response.user import UserResponseSchema
 from svc.handlers.user_handler import hash_password
 
 router = APIRouter()
@@ -29,4 +29,4 @@ def register(body: UserRegisterBodySchema) -> Any:
     user = User(**body.dict())
     user.save()
 
-    return UserResponseSchema(id=str(user.id), username=str(user.username), email=str(user.email)), HTTPStatus.CREATED
+    return UserResponseSchema(id=user.id, username=str(user.username), email=str(user.email)), HTTPStatus.CREATED

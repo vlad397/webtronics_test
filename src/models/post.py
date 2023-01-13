@@ -1,16 +1,13 @@
-from sqlalchemy import Column, String, ForeignKey, Integer, UniqueConstraint
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
 from models.base import BaseModel
 
 
 class Post(BaseModel):
     __tablename__ = "post"
-    __table_args__ = (
-        UniqueConstraint('header', 'author_id', name='unique_author_header'),
-    )
-
+    __table_args__ = (UniqueConstraint("header", "author_id", name="unique_author_header"),)
 
     header = Column(String, nullable=False)
     description = Column(String, nullable=False)

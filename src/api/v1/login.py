@@ -7,8 +7,8 @@ from fastapi import APIRouter, Depends
 from core.config import AuthJWT, config
 from models.user import User
 from schemas.body.user import UserLoginBodySchema
-from schemas.response.jwt import JWTToken
 from schemas.response.common import Message
+from schemas.response.jwt import JWTToken
 from svc.handlers.user_handler import validate_pass
 
 router = APIRouter()

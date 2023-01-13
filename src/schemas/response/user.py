@@ -1,8 +1,9 @@
-from schemas.base import BaseSchema
 import uuid
+
+from schemas.base import BaseSchema
 
 
 class UserResponseSchema(BaseSchema):
-    id: str | uuid.UUID
+    id: uuid.UUID
     username: str
     email: str
