@@ -6,11 +6,15 @@ from schemas.base import BaseSchema
 
 
 class UserLoginBodySchema(BaseSchema):
+    """Сериализатор входных данных для входа в аккаунт"""
+
     username: str
     password: str
 
 
 class UserRegisterBodySchema(UserLoginBodySchema):
+    """Сериализатор входных данных для регистрации"""
+
     email: str
 
     @validator("email")

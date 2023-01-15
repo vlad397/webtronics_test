@@ -17,6 +17,7 @@ router = APIRouter()
     responses={200: {"model": JWTAccessToken}, 400: {"model": Message}, 401: {"model": Message}},
 )
 def refresh(Authorize: AuthJWT = Depends()) -> Any:
+    """Функция получения access токена с помощью refresh токена"""
     try:
         Authorize.jwt_refresh_token_required()
 

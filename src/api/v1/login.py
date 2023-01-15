@@ -16,8 +16,9 @@ router = APIRouter()
 
 @router.post("/login/", description="Login method", responses={200: {"model": JWTToken}, 400: {"model": Message}})
 def login(body: UserLoginBodySchema, Authorize: AuthJWT = Depends()) -> Any:
-    user = User.find_by_username(body.username)
+    """Функция входа в аккаунт"""
 
+    user = User.find_by_username(body.username)
     if not user:
         return {"msg": "No such user"}, HTTPStatus.BAD_REQUEST
 

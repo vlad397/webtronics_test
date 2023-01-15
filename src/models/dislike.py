@@ -7,11 +7,15 @@ from models.base import BaseModel
 
 
 class Dislike(BaseModel):
-    __tablename__ = "dislike"
+    __tablename__ = "dislike_table"
     __table_args__ = (UniqueConstraint("user_id", "post_id", name="unique_user_post_dislike"),)
 
-    user_id = Column(UUID(as_uuid=True), ForeignKey("user.id"), default=uuid.uuid4, nullable=False)
-    post_id = Column(UUID(as_uuid=True), ForeignKey("post.id"), default=uuid.uuid4, nullable=False)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("user_table.id"), default=uuid.uuid4, nullable=False)
+    post_id = Column(UUID(as_uuid=True), ForeignKey("post_table.id"), default=uuid.uuid4, nullable=False)
+
+    @classmethod
+    def check_dislike(cls, post_id: str, user_id: str):
+        return cls.query.filter_by(post_id=post_id, user_id=user_id).one_or_none()
 
     def __str__(self):
         return f"User - {self.user_id}, Post - {self.post_id}"

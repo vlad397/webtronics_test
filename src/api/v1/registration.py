@@ -19,6 +19,7 @@ router = APIRouter()
     responses={201: {"model": UserResponseSchema}, 400: {"model": Message}},
 )
 def register(body: UserRegisterBodySchema) -> Any:
+    """Функция регистрации"""
     if User.find_by_email(body.email):
         return {"msg": "Such email already exists"}, HTTPStatus.BAD_REQUEST
 

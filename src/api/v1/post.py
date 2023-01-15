@@ -23,16 +23,15 @@ router = APIRouter()
     responses={201: {"model": PostResponseSchema}, 400: {"model": Message}, 401: {"model": Message}},
 )
 def create_post(body: PostBodySchema, Authorize: AuthJWT = Depends()) -> Any:
+    """Функция создания поста"""
     try:
         Authorize.jwt_required()
 
         user_id = Authorize.get_jwt_subject()
-
         if not user_id:
             return {"msg": "Please provide access token"}, HTTPStatus.BAD_REQUEST
 
         user = User.find_by_user_id(str(user_id))
-
         if not user:
             return {"msg": "No such user"}, HTTPStatus.BAD_REQUEST
 
@@ -64,19 +63,18 @@ def create_post(body: PostBodySchema, Authorize: AuthJWT = Depends()) -> Any:
         400: {"model": Message},
         401: {"model": Message},
         404: {"model": Message},
-    }
+    },
 )
 def get_all_posts(Authorize: AuthJWT = Depends()) -> Any:
+    """Функция получения всех постов"""
     try:
         Authorize.jwt_required()
 
         user_id = Authorize.get_jwt_subject()
-
         if not user_id:
             return {"msg": "Please provide access token"}, HTTPStatus.BAD_REQUEST
 
         posts = Post.query.all()
-
         if not posts:
             return {"msg": "No posts yet"}, HTTPStatus.NOT_FOUND
 
@@ -108,16 +106,15 @@ def get_all_posts(Authorize: AuthJWT = Depends()) -> Any:
     },
 )
 def get_post(id: str, Authorize: AuthJWT = Depends()) -> Any:
+    """Функция получения конкретного поста"""
     try:
         Authorize.jwt_required()
 
         user_id = Authorize.get_jwt_subject()
-
         if not user_id:
             return {"msg": "Please provide access token"}, HTTPStatus.BAD_REQUEST
 
         post = Post.find_by_post_id(id)
-
         if not post:
             return {"msg": "Post does not exist"}, HTTPStatus.NOT_FOUND
 
@@ -136,8 +133,8 @@ def get_post(id: str, Authorize: AuthJWT = Depends()) -> Any:
             author=post.author,
             likes_count=post.likes_count,
             dislikes_count=post.dislikes_count,
-            users_who_dislike=post.users_who_dislike,
-            users_who_like=post.users_who_like,
+            users_who_like=post.get_like_list(),
+            users_who_dislike=post.get_dislike_list(),
         ),
         HTTPStatus.OK,
     )
@@ -154,16 +151,15 @@ def get_post(id: str, Authorize: AuthJWT = Depends()) -> Any:
     },
 )
 def patch_post(id: str, body: PostBodySchema, Authorize: AuthJWT = Depends()) -> Any:
+    """Функция частичного изменения поста"""
     try:
         Authorize.jwt_required()
 
         user_id = Authorize.get_jwt_subject()
-
         if not user_id:
             return {"msg": "Please provide access token"}, HTTPStatus.BAD_REQUEST
 
         post = Post.find_by_post_id(id)
-
         if not post:
             return {"msg": "No such post"}, HTTPStatus.NOT_FOUND
 
@@ -201,16 +197,15 @@ def patch_post(id: str, body: PostBodySchema, Authorize: AuthJWT = Depends()) ->
     responses={200: {"model": Message}, 400: {"model": Message}, 401: {"model": Message}, 404: {"model": Message}},
 )
 def delete_post(id: str, Authorize: AuthJWT = Depends()) -> Any:
+    """Функция удаления поста"""
     try:
         Authorize.jwt_required()
 
         user_id = Authorize.get_jwt_subject()
-
         if not user_id:
             return {"msg": "Please provide access token"}, HTTPStatus.BAD_REQUEST
 
         post = Post.find_by_post_id(id)
-
         if not post:
             return {"msg": "No such post"}, HTTPStatus.NOT_FOUND
 

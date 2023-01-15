@@ -5,14 +5,14 @@ from models.base import BaseModel
 
 
 class User(BaseModel):
-    __tablename__ = "user"
+    __tablename__ = "user_table"
 
     username = Column(String(length=256), nullable=False, unique=True)
     password = Column(String(length=256), nullable=False)
     email = Column(String(length=256), nullable=False, unique=True)
     post = relationship("Post", back_populates="author")
-    liked_posts = relationship("Post", secondary="like", back_populates="users_who_like")
-    disliked_posts = relationship("Post", secondary="dislike", back_populates="users_who_dislike")
+    liked_posts = relationship("Post", secondary="like_table", back_populates="users_who_like")
+    disliked_posts = relationship("Post", secondary="dislike_table", back_populates="users_who_dislike")
 
     def __init__(self, username, password, email) -> None:
         self.username = username
